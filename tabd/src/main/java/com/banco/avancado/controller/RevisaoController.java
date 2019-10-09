@@ -1,7 +1,8 @@
 package com.banco.avancado.controller;
 
 import com.banco.avancado.model.Artigo;
-import com.banco.avancado.repository.ArtigoRepository;
+import com.banco.avancado.model.Revisao;
+import com.banco.avancado.repository.RevisaoRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -9,14 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping({"/artigo"})
-public class ArtigoController {
+@RequestMapping({"/revisao"})
+public class RevisaoController {
 
-    private ArtigoRepository repository;
+    private RevisaoRepository repository;
 
-    ArtigoController(ArtigoRepository artigoRepository) {
-        this.repository = artigoRepository;
-    }
+    RevisaoController(RevisaoRepository revisaoRepository) {this.repository = revisaoRepository;}
 
     @Transactional(rollbackFor = Exception.class)
     @GetMapping
@@ -26,7 +25,7 @@ public class ArtigoController {
 
     @Transactional(rollbackFor = Exception.class)
     @GetMapping(path = {"/{id}"})
-    public ResponseEntity<Artigo> findById(@PathVariable long id) {
+    public ResponseEntity<Revisao> findById(@PathVariable long id) {
         return repository.findById(id)
                 .map(record -> ResponseEntity.ok().body(record))
                 .orElse(ResponseEntity.notFound().build());
@@ -34,22 +33,21 @@ public class ArtigoController {
 
     @Transactional(rollbackFor = Exception.class)
     @PostMapping
-    public Artigo create(@RequestBody Artigo artigo) {
-        return repository.save(artigo);
+    public Revisao create(@RequestBody Revisao revisao) {
+        return repository.save(revisao);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Artigo> update(@PathVariable("id") long id,
-                                         @RequestBody Artigo artigo) {
+    public ResponseEntity<Revisao> update(@PathVariable("id") long id,
+                                         @RequestBody Revisao revisao) {
         return repository.findById(id)
                 .map(record -> {
-                    record.setTitulo(artigo.getTitulo());
-                    record.setResumo(artigo.getResumo());
-                    record.setPdf(artigo.getPdf());
-                    record.getAutores().addAll(artigo.getAutores());
-                    record.getRevisoes().addAll(artigo.getRevisoes());
-                    Artigo updated = repository.save(record);
+                    record.setRevisor(revisao.getRevisor());
+                    record.setNota(revisao.getNota());
+                    record.setComentario(revisao.getComentario());
+                    record.getRevisoes().addAll(revisao.getRevisoes());
+                    Revisao updated = repository.save(record);
                     return ResponseEntity.ok().body(updated);
                 }).orElse(ResponseEntity.notFound().build());
     }

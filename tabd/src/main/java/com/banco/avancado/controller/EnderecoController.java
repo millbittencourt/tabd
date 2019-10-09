@@ -1,7 +1,8 @@
 package com.banco.avancado.controller;
 
 import com.banco.avancado.model.Artigo;
-import com.banco.avancado.repository.ArtigoRepository;
+import com.banco.avancado.model.Endereco;
+import com.banco.avancado.repository.EnderecoRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -9,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping({"/artigo"})
-public class ArtigoController {
+@RequestMapping({"/endereco"})
+public class EnderecoController {
 
-    private ArtigoRepository repository;
+    private EnderecoRepository repository;
 
-    ArtigoController(ArtigoRepository artigoRepository) {
-        this.repository = artigoRepository;
+    EnderecoController(EnderecoRepository enderecoRepository) {
+        this.repository = enderecoRepository;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -26,7 +27,7 @@ public class ArtigoController {
 
     @Transactional(rollbackFor = Exception.class)
     @GetMapping(path = {"/{id}"})
-    public ResponseEntity<Artigo> findById(@PathVariable long id) {
+    public ResponseEntity<Endereco> findById(@PathVariable long id) {
         return repository.findById(id)
                 .map(record -> ResponseEntity.ok().body(record))
                 .orElse(ResponseEntity.notFound().build());
@@ -34,22 +35,22 @@ public class ArtigoController {
 
     @Transactional(rollbackFor = Exception.class)
     @PostMapping
-    public Artigo create(@RequestBody Artigo artigo) {
-        return repository.save(artigo);
+    public Endereco create(@RequestBody Endereco endereco) {
+        return repository.save(endereco);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Artigo> update(@PathVariable("id") long id,
-                                         @RequestBody Artigo artigo) {
+    public ResponseEntity<Endereco> update(@PathVariable("id") long id,
+                                         @RequestBody Endereco endereco) {
         return repository.findById(id)
                 .map(record -> {
-                    record.setTitulo(artigo.getTitulo());
-                    record.setResumo(artigo.getResumo());
-                    record.setPdf(artigo.getPdf());
-                    record.getAutores().addAll(artigo.getAutores());
-                    record.getRevisoes().addAll(artigo.getRevisoes());
-                    Artigo updated = repository.save(record);
+                    record.setRua(endereco.getRua());
+                    record.setBairro(endereco.getBairro());
+                    record.setCidade(endereco.getCidade());
+                    record.setEstado(endereco.getEstado());
+                    record.setComplemento(endereco.getComplemento());
+                    Endereco updated = repository.save(record);
                     return ResponseEntity.ok().body(updated);
                 }).orElse(ResponseEntity.notFound().build());
     }

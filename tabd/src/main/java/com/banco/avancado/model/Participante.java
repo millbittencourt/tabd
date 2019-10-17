@@ -1,5 +1,6 @@
 package com.banco.avancado.model;
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,16 +27,22 @@ public class Participante {
     @Column(name = "email", nullable = true)
     private String email;
 
-    @Column(name = "empresa", nullable = true)
+    @Column(name = "local_emprego", nullable = true)
     private String empresa;
 
     @Column(name = "revisor", nullable = true)
     private boolean revisor;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "enderecoId")
+    @JoinColumn(name = "endereco_id")
     private Endereco endereco;
 
-    @ManyToMany(mappedBy = "autores")
+    @JsonManagedReference
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "artigo_autor",
+            joinColumns = { @JoinColumn(name = "participante_id") },
+            inverseJoinColumns = { @JoinColumn(name = "artigo_id") }
+    )
     public List<Artigo> artigos;
 }

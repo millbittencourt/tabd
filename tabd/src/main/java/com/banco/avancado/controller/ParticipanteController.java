@@ -32,7 +32,7 @@ public class ParticipanteController {
 
     @Transactional(rollbackFor=Exception.class)
     @PostMapping
-    public Participante create(@RequestBody Participante participante){
+    public Participante create(@RequestBody  Participante participante){
         return repository.save(participante);
     }
 
@@ -48,7 +48,6 @@ public class ParticipanteController {
                     record.setEmpresa(participante.getEmpresa());
                     record.setRevisor(participante.isRevisor());
                     record.setEndereco(participante.getEndereco());
-                    record.getArtigos().addAll(participante.getArtigos());
                     Participante updated = repository.save(record);
                     return ResponseEntity.ok().body(updated);
                 }).orElse(ResponseEntity.notFound().build());

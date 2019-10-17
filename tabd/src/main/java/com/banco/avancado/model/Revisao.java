@@ -26,7 +26,4 @@ public class Revisao {
 
     @Column(name = "comentario", nullable = true)
     private String comentario;
-
-    @ManyToMany(mappedBy = "autores")
-    public List<Artigo> revisoes;
 }

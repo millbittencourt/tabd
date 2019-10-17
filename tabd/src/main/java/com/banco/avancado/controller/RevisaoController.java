@@ -46,7 +46,6 @@ public class RevisaoController {
                     record.setRevisor(revisao.getRevisor());
                     record.setNota(revisao.getNota());
                     record.setComentario(revisao.getComentario());
-                    record.getRevisoes().addAll(revisao.getRevisoes());
                     Revisao updated = repository.save(record);
                     return ResponseEntity.ok().body(updated);
                 }).orElse(ResponseEntity.notFound().build());

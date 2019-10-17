@@ -14,16 +14,13 @@ import java.util.Date;
 public class Cartao {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "numero", nullable = true)
+    @Column(name = "numeroCartao", nullable = true)
     private String numero;
 
     @Column(name = "dataVencimento", nullable = true)
     private Date dataVencimento;
 
-    @Column(name = "marca", nullable = true)
+    @Column(name = "marcaCartao", nullable = true)
     private String marca;
 
     @OneToOne(fetch = FetchType.LAZY)

@@ -1,5 +1,9 @@
 package com.banco.avancado.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,20 +31,15 @@ public class Artigo {
     @Column(name = "pdf", nullable = true)
     private byte[] pdf;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "artigo_Autor",
-            joinColumns = { @JoinColumn(name = "artigoId") },
-            inverseJoinColumns = { @JoinColumn(name = "participanteId") }
-    )
+    @JsonBackReference("artigos")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "artigos")
     private List<Participante> autores;
 
-
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinTable(
-            name = "artigo_Revisao",
-            joinColumns = { @JoinColumn(name = "artigoId") },
-            inverseJoinColumns = { @JoinColumn(name = "revisaoId") }
+            name = "artigo_revisao",
+            joinColumns =  @JoinColumn(name = "artigo_id") ,
+            inverseJoinColumns = @JoinColumn(name = "revisao_id")
     )
     public List<Revisao> revisoes;
 }

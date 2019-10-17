@@ -37,8 +37,8 @@ public class Participante {
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
 
-    @JsonManagedReference
-    @ManyToMany(cascade = { CascadeType.ALL })
+
+    @ManyToMany(cascade = { CascadeType.DETACH })
     @JoinTable(
             name = "artigo_autor",
             joinColumns = { @JoinColumn(name = "participante_id") },
